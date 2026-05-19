@@ -1,0 +1,57 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 29 abr 2026, 8:19:06 a.m.
+    Author     : Ricardo
+*/
+
+body {
+    background-color: #0a1f44;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.contenedor {
+    text-align: center;
+}
+
+.titulo {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.btn-rol {
+    width: 200px;
+    padding: 15px;
+    margin: 10px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.btn-estudiante {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-estudiante:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.btn-maestro {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn-maestro:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
