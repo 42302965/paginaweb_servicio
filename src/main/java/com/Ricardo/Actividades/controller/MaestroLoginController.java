@@ -23,32 +23,24 @@ public class MaestroLoginController {
 
     @GetMapping("/loginMaestro")
     public String loginMaestro() {
-
         return "maestro";
-
     }
-
+    
+    // Procesar login de maestro
     @PostMapping("/loginMaestro")
     public String procesarLogin(
             @RequestParam String username,
             @RequestParam String password,
-            Model model
-    ){
-
+            Model model){
+        // Buscar maestro por login
         Maestro maestro = maestroRepository.findByLogin(username);
 
+        //pruebas para ver si funcionaba el login de maestro
         if(maestro != null && password.equals("1234")){
-
             return "inicioMaestro";
-
         }
 
-        model.addAttribute(
-                "error",
-                "Usuario o contraseña incorrectos"
-        );
-
+        model.addAttribute("error","Usuario o contraseña incorrectos");
         return "maestro";
-
     }
 }

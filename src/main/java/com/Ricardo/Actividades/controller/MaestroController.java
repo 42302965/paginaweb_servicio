@@ -6,8 +6,11 @@ package com.Ricardo.Actividades.controller;
 
 import com.Ricardo.Actividades.model.Alumno;
 import com.Ricardo.Actividades.model.Maestro;
-import com.Ricardo.Actividades.repository.AlumnoRepository;
-import com.Ricardo.Actividades.repository.MaestroRepository;
+import com.Ricardo.Actividades.model.Evidencia;
+import com.Ricardo.Actividades.service.EvidenciaService;
+import com.Ricardo.Actividades.service.ActividadService;
+import com.Ricardo.Actividades.service.AlumnoService;
+import com.Ricardo.Actividades.service.MaestroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,23 +22,25 @@ import org.springframework.web.bind.annotation.*;
  * @author Ricardo
  */
 @Controller
+@RequestMapping("/maestro")
 public class MaestroController {
+    
+    @Autowired
+    private AlumnoService alumnoService;
 
     @Autowired
-    private AlumnoRepository alumnoRepository;
-
-    @Autowired
-    private MaestroRepository maestroRepository;
-
+    private MaestroService maestroService;
+    // Encriptador de contraseñas
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private EvidenciaService evidenciaService;
 
     @GetMapping("/listaAlumnos")
     public String listaAlumnos(Model model) {
-
-        model.addAttribute(
-                "alumnos", alumnoRepository.findAll()
-        );
+        
+        model.addAttribute("alumnos", alumnoService.listarTodos());
 
         return "listaAlumnos";
 
@@ -43,11 +48,8 @@ public class MaestroController {
 
     @GetMapping("/nuevoAlumno")
     public String nuevoAlumno(Model model) {
-
-        model.addAttribute(
-                "alumno",
-                new Alumno()
-        );
+        // Crear objeto alumno vacio
+        model.addAttribute("alumno", new Alumno());
 
         return "nuevoAlumno";
 
@@ -56,55 +58,68 @@ public class MaestroController {
     @PostMapping("/guardarAlumno")
     public String guardarAlumno(
             @ModelAttribute Alumno alumno) {
+        // Encriptar contraseña
         alumno.setContrasena(passwordEncoder.encode(alumno.getContrasena()));
-
-        Maestro maestro = maestroRepository.findById("1001").orElse(null);
+        // Buscar al maestro principal
+        Maestro maestro = maestroService.buscarPorId("1001");
+        // Asignar maestro al alumno
         alumno.setMaestro(maestro);
-        alumnoRepository.save(alumno);
-        return "redirect:/listaAlumnos";
+        // Se guarda al alumno
+        alumnoService.guardarAlumno(alumno);
+        return "redirect:/maestro/listaAlumnos";
     }
 
-    @GetMapping("/editarAlumno/{id}")
+    @GetMapping("/editarAlumno")
     public String editarAlumno(
-            @PathVariable("id") String matricula,
-            Model model
-    ) {
-
-        Alumno alumno
-                = alumnoRepository.findById(matricula)
-                        .orElse(null);
-
-        model.addAttribute(
-                "alumno",
-                alumno
-        );
-
+            @RequestParam("id") String matricula, Model model) {
+        // Buscar alumno por matrícula
+        Alumno alumno = alumnoService.buscarPorId(matricula);
+        // Enviar alumno a la vista
+        model.addAttribute("alumno",alumno);
         return "editarAlumno";
 
     }
-
+    //actualizar al alumno
     @PostMapping("/actualizarAlumno")
     public String actualizarAlumno(
             @ModelAttribute Alumno alumno) {
-
-        alumno.setContrasena(
-                passwordEncoder.encode(
-                        alumno.getContrasena()
-                )
-        );
-
-        Maestro maestro = maestroRepository.findById("1001").orElse(null);
+        // Encriptar nueva contraseña
+        alumno.setContrasena(passwordEncoder.encode(alumno.getContrasena()));
+        Maestro maestro = maestroService.buscarPorId("1001");
         alumno.setMaestro(maestro);
-        alumnoRepository.save(alumno);
-        return "redirect:/listaAlumnos";
+        alumnoService.guardarAlumno(alumno);
+        return "redirect:/maestro/listaAlumnos";
     }
 
-    @GetMapping("/eliminarAlumno/{id}")
+    @GetMapping("/eliminarAlumno")
     public String eliminarAlumno(
-            @PathVariable("id") String matricula) {
-        alumnoRepository.deleteById(matricula);
-        return "redirect:/listaAlumnos";
-
+            @RequestParam("id") String matricula) {
+        // Obtener la id (matricula) para borrar al alumno
+        actividadService.eliminarPorMatricula(matricula);
+        alumnoService.eliminarPorId(matricula);
+        return "redirect:/maestro/listaAlumnos";
     }
 
+    @Autowired
+    private ActividadService actividadService;
+    
+    @GetMapping("/verActividadesAlumno")
+    public String verActividadesAlumno(
+            @RequestParam String matricula, Model model) {
+        //lista de actividades de los alumnos
+        model.addAttribute("listaActividades", actividadService.listarPorMatricula(matricula));
+        return "actividadesAlumno";
+    }
+    
+    
+    @GetMapping("/verEvidencias")
+    public String verEvidencias(
+            @RequestParam Integer id, Model model) {
+        // Mostrar evidencias por la id (matricula)
+        model.addAttribute("listaEvidencias", evidenciaService.listarPorActividad(id));
+        model.addAttribute("actividadId", id);
+        return "evidencias";
+
+    }
+    
 }

@@ -19,31 +19,49 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActividadService {
 
+    // Repositorio de actividades
     @Autowired
     private ActividadRepository actividadRepository;
 
+    // Listar actividades por login de alumno
     public List<Actividad> listarPorAlumno(String matricula){
 
         return actividadRepository.findByAlumnoLogin(matricula);
 
     }
 
+    // Guardar actividad
     public void guardarActividad(Actividad actividad){
 
         actividadRepository.save(actividad);
 
     }
 
+    // Listar actividades por login
     public List<Actividad> listarPorLogin(String login){
 
         return actividadRepository.findByAlumnoLogin(login);
 
     }
 
-    public List<Actividad> listarPorMatricula(String matricula){
+    // Listar actividades por matrícula
+    public List<Actividad> listarPorMatricula(String matricula) {
 
         return actividadRepository.findByAlumno_Matricula(matricula);
 
     }
 
+    // Buscar actividad por id
+    public Actividad buscarPorId(Integer id) {
+
+        return actividadRepository.findById(id).orElse(null);
+
+    }
+
+    // Eliminar actividades de un alumno
+    public void eliminarPorMatricula(String matricula) {
+
+    actividadRepository.eliminarPorMatricula(matricula);
+
+}
 }

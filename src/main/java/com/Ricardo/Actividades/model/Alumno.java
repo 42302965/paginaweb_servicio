@@ -82,8 +82,8 @@ public class Alumno {
     return maestro;
 }
 
-public void setMaestro(Maestro maestro) {
-    this.maestro = maestro;
-}
+    public void setMaestro(Maestro maestro) {
+        this.maestro = maestro;
+    }
 
 }

@@ -19,19 +19,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class MaestroDetailsService implements UserDetailsService {
 
+    // Repositorio de maestros
     @Autowired
     private MaestroRepository maestroRepository;
 
+    // Método usado por Spring Security para autenticar maestros
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException{
 
+        // Buscar maestro por login
         Maestro maestro = maestroRepository.findByLogin(username);
 
+        // Validar si el maestro existe
         if (maestro == null){
+
             throw new UsernameNotFoundException("Maestro no encontrado");
+
         }
 
+        // Retornar usuario para Spring Security
         return new User(maestro.getLogin(), maestro.getContrasena(), new ArrayList<>());
     }
 

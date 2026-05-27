@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author Ricardo
  */
+
+//URLs de inicio
 @Controller
 public class ListadoController {
 
@@ -30,12 +32,12 @@ public class ListadoController {
         return "maestro";
     }
 
-    @RequestMapping("/inicioAlumno")
+    @RequestMapping("/alumno/inicioAlumno")
     public String inicioAlumno() {
         return "inicioAlumno";
     }
 
-    @RequestMapping("/inicioMaestro")
+    @RequestMapping("/maestro/inicioMaestro")
     public String inicioMaestro() {
         return "inicioMaestro";
 

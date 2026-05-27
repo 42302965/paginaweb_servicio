@@ -5,8 +5,8 @@
 package com.Ricardo.Actividades.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -50,6 +50,9 @@ public class Actividad {
 
     @Column(name = "act_comentario")
     private String comentario;
+    
+    @OneToMany(mappedBy = "actividad")
+    private List<Evidencia> evidencias;
 
     public Actividad() {
     }
@@ -133,6 +136,12 @@ public class Actividad {
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }
-    
-    
+
+    public List<Evidencia> getEvidencias() {
+        return evidencias;
+    }
+
+    public void setEvidencias(List<Evidencia> evidencias) {
+        this.evidencias = evidencias;
+    }
 }
