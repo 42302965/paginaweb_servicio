@@ -62,6 +62,14 @@ public class AlumnoDetailsService
         System.out.println("CONTRASENA HASH: "+ alumno.getContrasena());
 
         // Retornar usuario para Spring Security
-        return new User(alumno.getLogin(), alumno.getContrasena(), new ArrayList<>());
+        return User.builder()
+
+        .username(alumno.getLogin())
+
+        .password(alumno.getContrasena())
+
+        .roles("ALUMNO")
+
+        .build();
     }
 }

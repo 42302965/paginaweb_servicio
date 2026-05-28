@@ -11,6 +11,16 @@
     <a class="navbar-brand" href="#">
         Sistema de Actividades
     </a>
+    <div class="ml-auto">
+        <a th:href="@{/maestro/inicioMaestro}" class="btn btn-outline-light mr-2">
+            Inicio
+        </a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">
+                Cerrar Sesión
+            </button>
+        </form>
+    </div>
 </nav>
 <div class="container mt-5">
     <div class="d-flex justify-content-between mb-3">
@@ -45,8 +55,9 @@
                         Editar
                     </a>
 
-                    <a th:href="@{/maestro/eliminarAlumno(id=${alumno.matricula})}" class="btn btn-danger btn-sm">
-                        Eliminar
+                    <a th:href="@{/maestro/eliminarAlumno(id=${alumno.matricula})}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('¿Seguro que deseas eliminar este alumno?')">
+                            Eliminar
                     </a>
                     <a th:href="@{/maestro/verActividadesAlumno(matricula=${alumno.matricula})}" class="btn btn-info btn-sm">
                         Ver Actividades

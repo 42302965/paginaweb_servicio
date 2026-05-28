@@ -11,6 +11,16 @@
     <a class="navbar-brand" href="#">
         Sistema de Actividades
     </a>
+    <div class="ml-auto">
+        <a th:href="@{/alumno/inicioAlumno}" class="btn btn-outline-light mr-2">
+            Inicio
+        </a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">
+                Cerrar Sesión
+            </button>
+        </form>
+    </div>
 </nav>
 <div class="container mt-5">
     <div class="d-flex justify-content-between mb-3">

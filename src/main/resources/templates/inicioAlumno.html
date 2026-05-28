@@ -23,9 +23,11 @@
         <a th:href="@{/alumno/misActividades}" class="btn btn-primary btn-custom">
             Ver Mis Actividades
         </a>
-        <a th:href="@{/alumno}" class="btn btn-outline-secondary btn-custom">
+        <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-outline-secondary btn-custom">
             Cerrar Sesión
-        </a>
+        </button>
+    </form>
     </div>
 
 </body>

@@ -23,9 +23,11 @@
         <a th:href="@{/maestro/listaAlumnos}" class="btn btn-primary btn-custom">
             Administrar Alumnos
         </a>
-        <a th:href="@{/maestro}" class="btn btn-outline-secondary btn-custom">
+        <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-outline-secondary btn-custom">
             Cerrar Sesión
-        </a>
+        </button>
+    </form>
     </div>
 </body>
 </html>

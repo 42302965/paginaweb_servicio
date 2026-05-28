@@ -4,7 +4,6 @@
  */
 package com.Ricardo.Actividades.config;
 
-
 import com.Ricardo.Actividades.service.AlumnoDetailsService;
 import com.Ricardo.Actividades.service.MaestroDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +42,8 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider alumnoProvider() {
 
-        DaoAuthenticationProvider auth =
-                new DaoAuthenticationProvider();
+        DaoAuthenticationProvider auth
+                = new DaoAuthenticationProvider();
 
         // Servicio que busca alumnos en la BD
         auth.setUserDetailsService(alumnoDetailsService);
@@ -60,8 +59,8 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider maestroProvider() {
 
-        DaoAuthenticationProvider auth =
-                new DaoAuthenticationProvider();
+        DaoAuthenticationProvider auth
+                = new DaoAuthenticationProvider();
 
         // Servicio que busca maestros en la BD
         auth.setUserDetailsService(maestroDetailsService);
@@ -80,50 +79,43 @@ public class SecurityConfig {
             throws Exception {
 
         http
-
-            // Desactivar CSRF
-            .csrf(csrf -> csrf.disable())
-
-            // URLs del alumno protegidas
-            .securityMatcher(
-                    "/alumno",
-                    "/login",
-                    "/alumno/**"
-            )
-
-            // Permisos de acceso
-            .authorizeHttpRequests(auth -> auth
-
+                // Desactivar CSRF
+                .csrf(csrf -> csrf.disable())
+                // URLs del alumno protegidas
+                .securityMatcher(
+                        "/alumno",
+                        "/login",
+                        "/logout",
+                        "/alumno/**"
+                )
+                // Permisos de acceso
+                .authorizeHttpRequests(auth -> auth
                 // Estas rutas son públicas
                 .requestMatchers(
                         "/alumno",
                         "/login"
                 ).permitAll()
-
                 // Las demás requieren login
-                .anyRequest().authenticated()
-
-            )
-
-            // Configuración del login
-            .formLogin(login -> login
-
+                .anyRequest().hasRole("ALUMNO")
+                )
+                // Configuración del login
+                .formLogin(login -> login
                 // Página de login
                 .loginPage("/alumno")
-
                 // URL que procesa el login
                 .loginProcessingUrl("/login")
-
                 // Página al iniciar sesión correctamente
                 .defaultSuccessUrl(
                         "/alumno/inicioAlumno",
                         true
                 )
-
                 // Página si ocurre error
                 .failureUrl("/alumno?error=true")
-
-            );
+                )
+                .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                );
 
         // Usar autenticación de alumnos
         http.authenticationProvider(alumnoProvider());
@@ -139,49 +131,43 @@ public class SecurityConfig {
             throws Exception {
 
         http
-
-            // Desactivar CSRF
-            .csrf(csrf -> csrf.disable())
-
-            // URLs del maestro protegidas
-            .securityMatcher(
-                    "/maestro",
-                    "/loginMaestro",
-                    "/maestro/**"
-            )
-
-            // Permisos de acceso
-            .authorizeHttpRequests(auth -> auth
-
+                // Desactivar CSRF
+                .csrf(csrf -> csrf.disable())
+                // URLs del maestro protegidas
+                .securityMatcher(
+                        "/maestro",
+                        "/loginMaestro",
+                        "/logout",
+                        "/maestro/**"
+                )
+                // Permisos de acceso
+                .authorizeHttpRequests(auth -> auth
                 // Rutas públicas
                 .requestMatchers(
                         "/maestro",
                         "/loginMaestro"
                 ).permitAll()
-
                 // Las demás requieren login
-                .anyRequest().authenticated()
-
-            )
-
-            // Configuración del login
-            .formLogin(login -> login
-
+                .anyRequest().hasRole("MAESTRO")
+                )
+                // Configuración del login
+                .formLogin(login -> login
                 // Página de login maestro
                 .loginPage("/maestro")
-
                 // URL que procesa login
                 .loginProcessingUrl("/loginMaestro")
-
                 // Página principal al iniciar sesión
                 .defaultSuccessUrl(
                         "/maestro/inicioMaestro",
                         true
                 )
-
                 // Página en caso de error
                 .failureUrl("/maestro?error=true")
-            );
+                )
+                .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                );
 
         // Usar autenticación de maestros
         http.authenticationProvider(maestroProvider());

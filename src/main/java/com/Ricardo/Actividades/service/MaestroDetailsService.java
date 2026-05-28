@@ -39,7 +39,15 @@ public class MaestroDetailsService implements UserDetailsService {
         }
 
         // Retornar usuario para Spring Security
-        return new User(maestro.getLogin(), maestro.getContrasena(), new ArrayList<>());
+        return User.builder()
+
+        .username(maestro.getLogin())
+
+        .password(maestro.getContrasena())
+
+        .roles("MAESTRO")
+
+        .build();
     }
 
 }
